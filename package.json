@@ -1,9 +1,8 @@
 {
   "name": "bottom-up-selector",
-  "version": "1.0.0",
-  "main": "main.js",
+  "version": "1.1.0",
   "scripts": {
-    "dev": "node main.js"
+    "start": "node picker && node stopwatch"
   },
   "author": "",
   "license": "MIT",

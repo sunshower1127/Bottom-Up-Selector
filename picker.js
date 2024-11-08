@@ -1,5 +1,6 @@
 const { Client } = require("@notionhq/client");
 const fs = require("fs");
+const { exec } = require("child_process");
 require("dotenv").config();
 
 const key = process.env.NOTION_KEY;
@@ -53,7 +54,7 @@ function mapToObject(map) {
 function writePickedData(data) {
   fs.writeFileSync(
     __dirname + "/pickedData.json",
-    JSON.stringify(mapToObject(data), null, 4)
+    JSON.stringify(mapToObject(data), null, 2)
   );
 }
 
@@ -101,6 +102,7 @@ async function main() {
   const randomOne = pickRandom(newData);
 
   console.log(randomOne);
+  exec(`printf "${randomOne}" | pbcopy`);
 
   pickedData.set(randomOne, (pickedData.get(randomOne) || 0) + 1);
 
