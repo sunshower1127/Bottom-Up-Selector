@@ -2,7 +2,7 @@
   "name": "bottom-up-selector",
   "version": "1.1.0",
   "scripts": {
-    "start": "node picker && node stopwatch"
+    "start": "node picker"
   },
   "author": "",
   "license": "MIT",

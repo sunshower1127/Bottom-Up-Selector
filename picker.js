@@ -104,9 +104,27 @@ async function main() {
   console.log(randomOne);
   exec(`printf "${randomOne}" | pbcopy`);
 
-  pickedData.set(randomOne, (pickedData.get(randomOne) || 0) + 1);
+  // pickedData.set(randomOne, (pickedData.get(randomOne) || 0) + 1);
+  // writePickedData(pickedData);
 
-  writePickedData(pickedData);
+  const stopwatch = require("./stopwatch");
+
+  stopwatch.rl.input.once("keypress", (char, key) => {
+    stopwatch.stopStopwatch();
+    stopwatch.rl.question("몇시간 짜리인지: ", (input) => {
+      const number = parseInt(input, 10);
+      if (number) {
+        pickedData.set(
+          randomOne,
+          (pickedData.get(randomOne) || 0) + number /* -1 */
+        );
+        writePickedData(pickedData);
+        console.log(`${randomOne}: ${pickedData.get(randomOne)}`);
+      }
+      console.log(`남은 바텀업: ${subtractMaps(totalData, pickedData).size}개`);
+      stopwatch.rl.close();
+    });
+  });
 }
 
 main();

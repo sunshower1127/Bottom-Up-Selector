@@ -35,15 +35,10 @@ function stopStopwatch() {
   const finalTime = formatTime(secondsElapsed);
   console.log(`\nFinal time: ${finalTime}`);
   exec(`printf "${finalTime.split(":")[0]}" | pbcopy`);
-  rl.close();
 }
 
 console.log("바텀업 시작");
 
 startStopwatch();
 
-rl.input.on("keypress", (char, key) => {
-  if (key && key.name === "return") {
-    stopStopwatch();
-  }
-});
+module.exports = { rl, stopStopwatch };
