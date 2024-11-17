@@ -11,6 +11,10 @@ const notion = new Client({
   auth: key,
 });
 
+function sortMap(map) {
+  return new Map([...map.entries()].sort((a, b) => b[1] - a[1]));
+}
+
 async function loadList() {
   const response = await notion.databases.query({
     database_id: db,
@@ -27,6 +31,7 @@ async function loadList() {
         },
       },
     }) => {
+      if (number === 0) return;
       data.set(title, number);
     }
   );
@@ -92,14 +97,14 @@ async function main() {
 
   const pickedData = await loadPickedData(__dirname + "/pickedData.json");
 
-  const newData = subtractMaps(totalData, pickedData);
+  let remainingData = subtractMaps(totalData, pickedData);
 
-  if (newData.size === 0) {
+  if (remainingData.size === 0) {
     console.log("바텀업을 모두 완료했습니다. pickedData를 비워주세요.");
     return;
   }
 
-  const randomOne = pickRandom(newData);
+  const randomOne = pickRandom(remainingData);
 
   console.log(randomOne);
   exec(`printf "${randomOne}" | pbcopy`);
@@ -118,10 +123,16 @@ async function main() {
           randomOne,
           (pickedData.get(randomOne) || 0) + number /* -1 */
         );
-        writePickedData(pickedData);
+        writePickedData(sortMap(pickedData));
         console.log(`${randomOne}: ${pickedData.get(randomOne)}`);
       }
-      console.log(`남은 바텀업: ${subtractMaps(totalData, pickedData).size}개`);
+      remainingData = subtractMaps(totalData, pickedData);
+      // console.log(remainingData);
+      const sum = [...remainingData.values()].reduce(
+        (acc, cur) => acc + cur,
+        0
+      );
+      console.log(`남은 바텀업: ${sum}개`);
       stopwatch.rl.close();
     });
   });
