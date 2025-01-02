@@ -106,7 +106,7 @@ function pickRandom(data) {
   const tempList = [];
   data.forEach((number, title) => {
     for (let i = 0; i < number; i++) {
-      tempList.push(title);
+      tempList.push({ title, number });
     }
   });
 
@@ -173,10 +173,10 @@ async function main() {
         return;
       }
 
-      const randomOne = pickRandom(remainingData);
+      const { title: randomOne, number } = pickRandom(remainingData);
 
-      console.log(randomOne);
       exec(`printf "${randomOne}" | pbcopy`);
+      console.log(`${randomOne} (최대 ${number}개 가능)`);
 
       // pickedData.set(randomOne, (pickedData.get(randomOne) || 0) + 1);
       // writePickedData(pickedData);

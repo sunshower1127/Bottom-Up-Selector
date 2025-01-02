@@ -23,10 +23,13 @@ function startStopwatch() {
     readline.cursorTo(process.stdout, 0);
     process.stdout.write(`시간: ${formatTime(secondsElapsed)}`);
 
-    if (secondsElapsed === minMinutes * 60)
+    if (secondsElapsed % (minMinutes * 60) == 0) {
       exec(
-        'terminal-notifier -message "20분 지남!" -title "바텀업 알림" -sound default'
+        `terminal-notifier -message "${Math.floor(
+          secondsElapsed / 60
+        )}분 지남!" -title "바텀업 알림" -sound default`
       );
+    }
   }, 1000);
 }
 
